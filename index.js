@@ -2,6 +2,7 @@ import 'regenerator-runtime/runtime.js';
 import * as Sphinx from 'sphinx-bot'
 import * as fetch from 'node-fetch'
 import dotenv from 'dotenv'
+import moment from 'moment'
 dotenv.config()
 
 const msg_types = Sphinx.MSG_TYPE

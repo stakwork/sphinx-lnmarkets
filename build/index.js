@@ -10,6 +10,8 @@ var fetch = _interopRequireWildcard(require("node-fetch"));
 
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
+var _moment = _interopRequireDefault(require("moment"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -162,7 +164,7 @@ function init() {
 
             case 32:
               fields = j2.map(function (p) {
-                var date = moment(p.creation_ts).format('ddd, MMM DD h:mm');
+                var date = (0, _moment.default)(p.creation_ts).format('ddd, MMM DD h:mm');
                 return {
                   name: date,
                   value: "Price: ".concat(p.price, ", Margin: ").concat(p.margin)
