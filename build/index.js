@@ -167,7 +167,7 @@ function init() {
                 var date = (0, _moment.default)(p.creation_ts).format('ddd, MMM DD h:mm');
                 return {
                   name: date,
-                  value: "Price: ".concat(p.price, ", Margin: ").concat(p.margin)
+                  value: "Price: ".concat(p.price, ", Take Profit: ").concat(p.takeprofit, ", Margin: ").concat(p.margin)
                 };
               });
               console.log(fields);

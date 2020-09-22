@@ -60,7 +60,7 @@ function init() {
         const fields = j2.map(p=>{
           const date = moment(p.creation_ts).format('ddd, MMM DD h:mm')
           return {
-            name:date, value:`Price: ${p.price}, Margin: ${p.margin}`
+            name:date, value:`Price: ${p.price}, Take Profit: ${p.takeprofit}, Margin: ${p.margin}`
           }
         })
         console.log(fields)
