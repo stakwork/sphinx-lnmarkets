@@ -47,6 +47,7 @@ function init() {
           .setDescription('Your balance is: '+j.balance)
           .setThumbnail(botSVG)
         message.channel.send({ embed })
+        return
 
       case 'positions':
         const r2 = await fetch(url+'/positions',{
@@ -65,6 +66,7 @@ function init() {
           })))
           .setThumbnail(botSVG)
         message.channel.send({ embed:embed2 })
+        return
         
       default:
         const embed3 = new Sphinx.MessageEmbed()
