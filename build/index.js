@@ -16,8 +16,6 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -61,7 +59,7 @@ function init() {
   }());
   client.on(msg_types.MESSAGE, /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(message) {
-      var arr, cmd, r, j, embed, r2, j2, embed2, embed3;
+      var arr, cmd, r, j, embed, r2, j2, fields, embed2, embed3;
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -86,7 +84,7 @@ function init() {
             case 5:
               cmd = arr[1];
               _context2.t0 = cmd;
-              _context2.next = _context2.t0 === 'balance' ? 9 : _context2.t0 === 'positions' ? 22 : 35;
+              _context2.next = _context2.t0 === 'balance' ? 9 : _context2.t0 === 'positions' ? 22 : 37;
               break;
 
             case 9:
@@ -163,21 +161,21 @@ function init() {
               return _context2.abrupt("return");
 
             case 32:
-              embed2 = new Sphinx.MessageEmbed().setAuthor('LNMarkets').setTitle('Positions:').addFields(j2.map(function (p) {
-                var _ref3;
-
-                return _ref3 = {
-                  name: 'Price:',
-                  value: p.price,
-                  inline: true
-                }, _defineProperty(_ref3, "name", 'Takeprofit:'), _defineProperty(_ref3, "value", p.takeprofit), _defineProperty(_ref3, "inline", true), _defineProperty(_ref3, "name", 'Margin'), _defineProperty(_ref3, "value", p.margin), _defineProperty(_ref3, "inline", true), _ref3;
-              })).setThumbnail(botSVG);
+              fields = j2.map(function (p) {
+                var date = moment(p.creation_ts).format('ddd, MMM DD h:mm');
+                return {
+                  name: date,
+                  value: "Price: ".concat(p.price, ", Margin: ").concat(p.margin)
+                };
+              });
+              console.log(fields);
+              embed2 = new Sphinx.MessageEmbed().setAuthor('LNMarkets').setTitle('Positions:').addFields(fields).setThumbnail(botSVG);
               message.channel.send({
                 embed: embed2
               });
               return _context2.abrupt("return");
 
-            case 35:
+            case 37:
               embed3 = new Sphinx.MessageEmbed().setAuthor('LNMarkets').setTitle('LNMarkets Commands:').addFields([{
                 name: 'Balance',
                 value: '/lnm balance'
@@ -193,7 +191,7 @@ function init() {
               });
               return _context2.abrupt("return");
 
-            case 38:
+            case 40:
             case "end":
               return _context2.stop();
           }

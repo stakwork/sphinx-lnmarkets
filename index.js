@@ -56,14 +56,17 @@ function init() {
         if (!r2.ok) return
         const j2 = await r2.json()
         if(!(j2 && Array.isArray(j2))) return
+        const fields = j2.map(p=>{
+          const date = moment(p.creation_ts).format('ddd, MMM DD h:mm')
+          return {
+            name:date, value:`Price: ${p.price}, Margin: ${p.margin}`
+          }
+        })
+        console.log(fields)
         const embed2 = new Sphinx.MessageEmbed()
           .setAuthor('LNMarkets')
           .setTitle('Positions:')
-          .addFields(j2.map(p=>({
-            name:'Price:', value:p.price, inline:true,
-            name:'Takeprofit:', value:p.takeprofit, inline:true,
-            name:'Margin', value:p.margin, inline:true,
-          })))
+          .addFields(fields)
           .setThumbnail(botSVG)
         message.channel.send({ embed:embed2 })
         return
