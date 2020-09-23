@@ -61,7 +61,8 @@ function init() {
   }());
   client.on(msg_types.MESSAGE, /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(message) {
-      var arr, cmd, r, j, embed, r2, j2, fields, embed2, embed3;
+      var arr, cmd, isAdmin, _embed, r, j, embed, r2, j2, fields, embed2, embed3;
+
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -85,12 +86,27 @@ function init() {
 
             case 5:
               cmd = arr[1];
+              isAdmin = message.member.roles.find(function (role) {
+                return role.name === 'Admin';
+              });
               _context2.t0 = cmd;
-              _context2.next = _context2.t0 === 'balance' ? 9 : _context2.t0 === 'positions' ? 22 : 37;
+              _context2.next = _context2.t0 === 'balance' ? 10 : _context2.t0 === 'positions' ? 27 : 42;
               break;
 
-            case 9:
-              _context2.next = 11;
+            case 10:
+              if (isAdmin) {
+                _context2.next = 14;
+                break;
+              }
+
+              _embed = new Sphinx.MessageEmbed().setAuthor('LNMarkets').setDescription('You must be an Admin to use this command').setThumbnail(botSVG);
+              message.channel.send({
+                embed: _embed
+              });
+              return _context2.abrupt("return");
+
+            case 14:
+              _context2.next = 16;
               return fetch(url + '/user', {
                 headers: {
                   'Authorization': "Bearer ".concat(lnmarketsToken),
@@ -98,24 +114,10 @@ function init() {
                 }
               });
 
-            case 11:
+            case 16:
               r = _context2.sent;
 
               if (r.ok) {
-                _context2.next = 14;
-                break;
-              }
-
-              return _context2.abrupt("return");
-
-            case 14:
-              _context2.next = 16;
-              return r.json();
-
-            case 16:
-              j = _context2.sent;
-
-              if (j.balance) {
                 _context2.next = 19;
                 break;
               }
@@ -123,14 +125,28 @@ function init() {
               return _context2.abrupt("return");
 
             case 19:
+              _context2.next = 21;
+              return r.json();
+
+            case 21:
+              j = _context2.sent;
+
+              if (j.balance) {
+                _context2.next = 24;
+                break;
+              }
+
+              return _context2.abrupt("return");
+
+            case 24:
               embed = new Sphinx.MessageEmbed().setAuthor('LNMarkets').setDescription('Your balance is: ' + j.balance).setThumbnail(botSVG);
               message.channel.send({
                 embed: embed
               });
               return _context2.abrupt("return");
 
-            case 22:
-              _context2.next = 24;
+            case 27:
+              _context2.next = 29;
               return fetch(url + '/positions', {
                 headers: {
                   'Authorization': "Bearer ".concat(lnmarketsToken),
@@ -138,24 +154,10 @@ function init() {
                 }
               });
 
-            case 24:
+            case 29:
               r2 = _context2.sent;
 
               if (r2.ok) {
-                _context2.next = 27;
-                break;
-              }
-
-              return _context2.abrupt("return");
-
-            case 27:
-              _context2.next = 29;
-              return r2.json();
-
-            case 29:
-              j2 = _context2.sent;
-
-              if (j2 && Array.isArray(j2)) {
                 _context2.next = 32;
                 break;
               }
@@ -163,6 +165,20 @@ function init() {
               return _context2.abrupt("return");
 
             case 32:
+              _context2.next = 34;
+              return r2.json();
+
+            case 34:
+              j2 = _context2.sent;
+
+              if (j2 && Array.isArray(j2)) {
+                _context2.next = 37;
+                break;
+              }
+
+              return _context2.abrupt("return");
+
+            case 37:
               fields = j2.map(function (p) {
                 var date = (0, _moment.default)(p.creation_ts).format('ddd, MMM DD h:mm');
                 return {
@@ -177,7 +193,7 @@ function init() {
               });
               return _context2.abrupt("return");
 
-            case 37:
+            case 42:
               embed3 = new Sphinx.MessageEmbed().setAuthor('LNMarkets').setTitle('LNMarkets Commands:').addFields([{
                 name: 'Balance',
                 value: '/lnm balance'
@@ -193,7 +209,7 @@ function init() {
               });
               return _context2.abrupt("return");
 
-            case 40:
+            case 45:
             case "end":
               return _context2.stop();
           }

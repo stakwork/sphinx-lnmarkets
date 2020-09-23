@@ -33,10 +33,20 @@ function init() {
     if (arr.length < 2) return
     if (arr[0]!=='/lnm') return
     const cmd = arr[1]
+
+    const isAdmin = message.member.roles.find(role => role.name === 'Admin')
     
     switch (cmd) {
 
       case 'balance':
+        if(!isAdmin) {
+          const embed = new Sphinx.MessageEmbed()
+            .setAuthor('LNMarkets')
+            .setDescription('You must be an Admin to use this command')
+            .setThumbnail(botSVG)
+          message.channel.send({ embed })
+          return
+        }
         const r = await fetch(url+'/user',{
           headers:{'Authorization': `Bearer ${lnmarketsToken}`, 'Accept': 'application/json'}
         })
